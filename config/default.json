@@ -1,0 +1,11 @@
+{
+    "beam": {
+        "username": "username",
+        "password": "password"
+    },
+    "httpAuth": {
+        "user": "username",
+        "pass": "password",
+        "sendImmediately": true
+    }
+}

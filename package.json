@@ -1,0 +1,29 @@
+{
+  "name": "agar-game-demo",
+  "version": "1.0.0",
+  "description": "Beam plays agar.io!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "curl -O http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.0.jar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WatchBeam/agar-game-demo.git"
+  },
+  "keywords": [
+    "tetris",
+    "beam",
+    "interactive"
+  ],
+  "author": "Connor Peet <connor@peet.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WatchBeam/agar-game-demo/issues"
+  },
+  "homepage": "https://github.com/WatchBeam/agar-game-demo#readme",
+  "dependencies": {
+    "bluebird": "^3.0.6",
+    "request-promise": "^1.0.2"
+  }
+}
