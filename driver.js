@@ -56,13 +56,12 @@ AgarDriver.prototype._login = function () {
         .waitForVisible(playButton, timeout)
         .then(() => {
             this.state = states.playing;
-            this.client.click('.btn-play-guest')
+            return this.client.click(playButton);
         })
         .waitForVisible(continueButton, timeout)
+        .then(() => { this.state = states.opening })
         .pause(5000)
         .then(() => {
-            this.state = states.opening;
-            console.log('restarting');
             this.client.click(continueButton);
             return this._login();
         }).catch((err) => console.log(err));
