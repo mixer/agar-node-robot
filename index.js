@@ -1,8 +1,10 @@
+const Packets = require('beam-interactive-node/dist/robot/proto/packets');
 const Driver = require('./driver');
 const start = require('./tetris');
 
 const driver = new Driver();
-
+const spacebar = 32;
+const Target = Packets.ProgressUpdate.Progress.TargetType;
 
 start(function (err, robot) {
     if (err) throw err;
@@ -17,15 +19,31 @@ start(function (err, robot) {
         });
 
         report.tactile.forEach((tactile) => {
-            if (tactile.code === 32) {
-                data.holdingSpace += tactile.up.frequency - tactile.down.frequency;
+            if (tactile.code === spacebar) {
+                data.holdingSpace = Math.max(0, data.holdingSpace +
+                    tactile.up.frequency - tactile.down.frequency);
             }
         });
 
+        var threshold = report.quorum / 2;
+        var splitProg = {
+            target: Target.TACTILE,
+            progress: threshold ? Math.min(1, data.holdingSpace / threshold) : 0,
+            code: spacebar,
+        };
+        var progress = [
+            { target: Target.JOYSTICK, code: 0, progress: data.x },
+            { target: Target.JOYSTICK, code: 1, progress: data.y },
+            splitProg
+        ];
+
         driver.moveMouse(data.x, data.y);
-        if (data.holdingSpace / report.quorum) {
+        if (data.holdingSpace > threshold) {
             data.holdingSpace = 0;
+            splitProg.fired = true;
             driver.split();
         }
+
+        robot.send(new Packets.ProgressUpdate({ progress }));
     });
 });
