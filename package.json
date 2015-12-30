@@ -24,6 +24,7 @@
   "homepage": "https://github.com/WatchBeam/agar-game-demo#readme",
   "dependencies": {
     "bluebird": "^3.0.6",
-    "request-promise": "^1.0.2"
+    "request-promise": "^1.0.2",
+    "webdriverio": "^3.4.0"
   }
 }
