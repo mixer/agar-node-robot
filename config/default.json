@@ -7,5 +7,6 @@
         "user": "username",
         "pass": "password",
         "sendImmediately": true
-    }
+    },
+    "path": "https://lab.beam.pro/api/v1"
 }

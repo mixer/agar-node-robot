@@ -1,4 +1,4 @@
-const Packets = require('beam-interactive-node/dist/robot/proto/packets');
+const Packets = require('beam-interactive-node/dist/robot/packets');
 const Driver = require('./driver');
 const start = require('./tetris');
 

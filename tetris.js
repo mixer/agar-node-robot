@@ -1,15 +1,14 @@
 const Bluebird = require('bluebird');
-const Packets = require('beam-interactive-node/dist/robot/proto/packets');
+const Packets = require('beam-interactive-node/dist/robot/packets');
 const Tetris = require('beam-interactive-node');
 
 const rp = require('request-promise');
 const config = require('./config/config');
-const path = 'https://lab.beam.pro/api/v1';
 
 module.exports = function (callback) {
     var channel, user;
     rp({
-        url: path + '/users/login',
+        url: config.path + '/users/login',
         method: 'POST',
         auth: config.httpAuth,
         form: {
@@ -22,7 +21,7 @@ module.exports = function (callback) {
         channel = data.channel;
         user = data;
         return rp({
-            url: path + '/tetris/' + channel.id + '/robot',
+            url: config.path + '/tetris/' + channel.id + '/robot',
             auth: config.httpAuth,
             jar: true,
             json: true
