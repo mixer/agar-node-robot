@@ -20,8 +20,8 @@ start(function (err, robot) {
 
         report.tactile.forEach((tactile) => {
             if (tactile.code === spacebar) {
-                data.holdingSpace = Math.max(0, data.holdingSpace +
-                    tactile.up.frequency - tactile.down.frequency);
+                data.holdingSpace = Math.max(0, data.holdingSpace -
+                    tactile.up.frequency + tactile.down.frequency);
             }
         });
 
