@@ -52,8 +52,8 @@ AgarDriver.prototype._login = function () {
     const timeout = 1000 * 10000;
 
     return this.client
-        .pause(1000)
         .waitForVisible(playButton, timeout)
+        .pause(1000)
         .then(() => {
             this.state = states.playing;
             return this.client.click(playButton);
