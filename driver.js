@@ -4,7 +4,6 @@ const webdriver = require('webdriverio');
 
 const states = Object.freeze({ idle: 0, opening: 1, playing: 2 });
 
-
 function whenState(states, method) {
     if (!Array.isArray(states)) states = [states];
 
@@ -25,13 +24,14 @@ AgarDriver.prototype.start = function () {
     this.state = states.opening;
     this.client = webdriver.remote({
         desiredCapabilities: {
-            browserName: 'firefox',
+            browserName: process.env.B_BROWSER || 'firefox',
         },
     });
 
     // setInterval(() => {}, 1000);
 
     this.client.init()
+        .windowHandleSize({width:process.env.B_WIDTH,height:process.env.B_HEIGHT})
         .url('http://agar.io')
         .then(() => this._login());
 
@@ -53,7 +53,9 @@ AgarDriver.prototype._login = function () {
 
     return this.client
         .waitForVisible(playButton, timeout)
-        .pause(1000)
+        .pause(500)
+        .setValue('#nick', process.env.B_NICK || 'Beam')
+        .pause(500)
         .then(() => {
             this.state = states.playing;
             return this.client.click(playButton);
