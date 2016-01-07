@@ -25,6 +25,9 @@ AgarDriver.prototype.start = function () {
     this.client = webdriver.remote({
         desiredCapabilities: {
             browserName: process.env.B_BROWSER || 'firefox',
+            chromeOptions: {
+                args : ["--disable-plugins"]
+            }
         },
     });
 
@@ -54,7 +57,7 @@ AgarDriver.prototype._login = function () {
     return this.client
         .waitForVisible(playButton, timeout)
         .pause(500)
-        .setValue('#nick', process.env.B_NICK || 'Beam')
+        .setValue('#nick', process.env.B_NICK || 'beam.pro')
         .pause(500)
         .then(() => {
             this.state = states.playing;
