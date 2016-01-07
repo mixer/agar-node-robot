@@ -26,7 +26,11 @@ AgarDriver.prototype.start = function () {
         desiredCapabilities: {
             browserName: process.env.B_BROWSER || 'firefox',
             chromeOptions: {
-                args : ["--disable-plugins"]
+                args : [
+                    '--disable-plugins',
+                    '--disable-internal-flash',
+                    '--disable-bundled-ppapi-flash'
+                ]
             }
         },
     });
