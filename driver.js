@@ -30,7 +30,7 @@ AgarDriver.prototype.start = function () {
                     '--disable-plugins',
                     '--disable-internal-flash',
                     '--disable-bundled-ppapi-flash'
-                ]
+                ].concat((process.env.B_ADD_CHROME_ARGS || '').split(','))
             }
         },
     });
