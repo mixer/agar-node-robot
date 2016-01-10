@@ -61,7 +61,7 @@ AgarDriver.prototype._login = function () {
     const continueButton = '#statsContinue';
     const timeout = 1000 * 10000;
 
-    return this.client
+    this.client
         .waitForVisible(playButton, timeout)
         .pause(500)
         .setValue('#nick', process.env.B_NICK || 'beam.pro')
