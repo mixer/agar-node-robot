@@ -4,6 +4,9 @@ const webdriver = require('webdriverio');
 
 const states = Object.freeze({ idle: 0, opening: 1, playing: 2 });
 
+var lastRestart = Date.now();
+const RESTART_TIMEOUT = 1000 * 60 * 60 * 2; // 2 hours
+
 function whenState(states, method) {
     if (!Array.isArray(states)) states = [states];
 
@@ -71,6 +74,12 @@ AgarDriver.prototype._login = function () {
         .then(() => { this.state = states.opening })
         .pause(5000)
         .then(() => {
+            if (Date.now() - lastRestart >= RESTART_TIMEOUT) {
+                lastRestart = Date.now();
+                return this.client
+                        .refresh()
+                        .then(() => this._login());
+            }
             this.client.click(continueButton);
             return this._login();
         }).catch((err) => console.log(err));
