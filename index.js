@@ -6,8 +6,12 @@ const driver = new Driver();
 const spacebar = 32;
 const Target = Packets.ProgressUpdate.Progress.TargetType;
 
+var _robot;
+
 start(function (err, robot) {
     if (err) throw err;
+
+    _robot = robot;
 
     driver.on('change', (state) => console.log(state));
     driver.start();
