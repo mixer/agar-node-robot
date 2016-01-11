@@ -76,9 +76,10 @@ AgarDriver.prototype._login = function () {
         .then(() => {
             if (Date.now() - lastRestart >= RESTART_TIMEOUT) {
                 lastRestart = Date.now();
-                return this.client
-                        .refresh()
-                        .then(() => this._login());
+                this.client.end().then(() => {
+                    this.start();
+                });
+                return;
             }
             this.client.click(continueButton);
             return this._login();
