@@ -1,5 +1,7 @@
 'use strict';
 
+const SPLIT_TIMEOUT = 10 * 1000;
+
 const Packets = require('beam-interactive-node/dist/robot/packets');
 const Driver = require('./driver');
 const start = require('./tetris');
@@ -9,7 +11,8 @@ const spacebar = 32;
 
 var _robot;
 
-const SPLIT_TIMEOUT = 10 * 1000;
+const SQRT_TWO = Math.sqrt(2);
+
 var splitLocked = false;
 
 start(function (err, robot) {
@@ -52,7 +55,7 @@ start(function (err, robot) {
         joystickProgress.push(new Packets.ProgressUpdate.JoystickUpdate({
             id: 0,
             angle: Math.atan2(data.y, data.x),
-            intensity: Math.sqrt(data.x * data.x + data.y * data.y)
+            intensity: Math.sqrt(data.x * data.x + data.y * data.y) / SQRT_TWO
         }));
 
         let tactileProgress = [];
