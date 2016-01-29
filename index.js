@@ -64,7 +64,7 @@ start(function (err, robot) {
                 id: 1,
                 cooldown: splitFired ? SPLIT_TIMEOUT : 0,
                 fired: splitFired,
-                progress: data.holdingSpace / threshold
+                progress: (threshold > 0) ? (data.holdingSpace / threshold) : 0
             }));
         }
 
