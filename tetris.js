@@ -30,7 +30,7 @@ module.exports = function (callback) {
         data.remote = data.address;
         data.channel = channel.id;
         data.reportInterval = 20;
-
+        
         const robot = new Tetris.Robot(data);
         robot.handshake(function (err) {
             callback(err, robot);

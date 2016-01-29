@@ -1,12 +1,16 @@
+'use strict';
+
 const Packets = require('beam-interactive-node/dist/robot/packets');
 const Driver = require('./driver');
 const start = require('./tetris');
 
 const driver = new Driver();
 const spacebar = 32;
-const Target = Packets.ProgressUpdate.Progress.TargetType;
 
 var _robot;
+
+const SPLIT_TIMEOUT = 10 * 1000;
+var splitLocked = false;
 
 start(function (err, robot) {
     if (err) throw err;
@@ -16,38 +20,54 @@ start(function (err, robot) {
     driver.on('change', (state) => console.log(state));
     driver.start();
 
-    var data = { x: 0, y: 0, holdingSpace: 0 };
+    let data = { x: 0, y: 0, holdingSpace: 0 };
     robot.on('report', function (report) {
-        report.joystick.forEach((joy) => {
-            data[joy.axis === 0 ? 'x': 'y'] = joy.info.mean
-        });
 
-        report.tactile.forEach((tactile) => {
-            if (tactile.code === spacebar) {
-                data.holdingSpace = Math.max(0, data.holdingSpace -
-                    tactile.up.frequency + tactile.down.frequency);
-            }
-        });
+        let joy = report.joystick[0];
+        if (joy) {
+            data.x = joy.coordMean.X;
+            data.y = joy.coordMean.Y;
+        }
 
-        var threshold = report.quorum / 2;
-        var splitProg = {
-            target: Target.TACTILE,
-            progress: threshold ? Math.min(1, data.holdingSpace / threshold) : 0,
-            code: spacebar,
-        };
-        var progress = [
-            { target: Target.JOYSTICK, code: 0, progress: data.x },
-            { target: Target.JOYSTICK, code: 1, progress: data.y },
-            splitProg
-        ];
+        let tactile = report.tactile[0];
+        if (tactile) {
+            data.holdingSpace = tactile.holding;
+        }
+
+        let threshold = report.users.quorum / 2;
+
+        let splitFired = false;
 
         driver.moveMouse(data.x, data.y);
-        if (data.holdingSpace > threshold) {
-            data.holdingSpace = 0;
-            splitProg.fired = true;
+        if (data.holdingSpace > threshold && !splitLocked) {
+            splitFired = true;
+            splitLocked = true;
+            setTimeout(function () {
+                splitLocked = false;
+            }, SPLIT_TIMEOUT);
             driver.split();
         }
 
-        robot.send(new Packets.ProgressUpdate({ progress }));
+        let joystickProgress = [];
+        joystickProgress.push(new Packets.ProgressUpdate.JoystickUpdate({
+            id: 0,
+            angle: Math.atan2(data.y, data.x),
+            intensity: Math.sqrt(data.x * data.x + data.y * data.y)
+        }));
+
+        let tactileProgress = [];
+        if (splitFired || !splitLocked) {
+            tactileProgress.push(new Packets.ProgressUpdate.TactileUpdate({
+                id: 1,
+                cooldown: splitFired ? SPLIT_TIMEOUT : 0,
+                fired: splitFired,
+                progress: data.holdingSpace / threshold
+            }));
+        }
+
+        robot.send(new Packets.ProgressUpdate({
+            joystick: joystickProgress,
+            tactile: tactileProgress
+        }));
     });
 });
