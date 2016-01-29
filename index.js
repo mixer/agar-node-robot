@@ -15,6 +15,14 @@ const ANGLE_OFFSET = Math.PI / 2;
 
 var splitLocked = false;
 
+function clamp(val, min, max) {
+    if (val < min)
+        return min;
+    if (val > max)
+        return max;
+    return val;
+}
+
 start(function (err, robot) {
     if (err) throw err;
 
@@ -55,7 +63,7 @@ start(function (err, robot) {
         joystickProgress.push(new Packets.ProgressUpdate.JoystickUpdate({
             id: 0,
             angle: Math.atan2(data.y, data.x) + ANGLE_OFFSET,
-            intensity: Math.sqrt(data.x * data.x + data.y * data.y)
+            intensity: clamp(Math.sqrt(data.x * data.x + data.y * data.y), 0, 1)
         }));
 
         let tactileProgress = [];
@@ -64,7 +72,7 @@ start(function (err, robot) {
                 id: 1,
                 cooldown: splitFired ? SPLIT_TIMEOUT : 0,
                 fired: splitFired,
-                progress: (threshold > 0) ? (data.holdingSpace / threshold) : 0
+                progress: (threshold > 0) ? clamp(data.holdingSpace / threshold, 0, 1) : 0
             }));
         }
 
