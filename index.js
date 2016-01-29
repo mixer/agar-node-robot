@@ -11,7 +11,7 @@ const spacebar = 32;
 
 var _robot;
 
-const SQRT_TWO = Math.sqrt(2);
+const ANGLE_OFFSET = Math.PI / 2;
 
 var splitLocked = false;
 
@@ -54,8 +54,8 @@ start(function (err, robot) {
         let joystickProgress = [];
         joystickProgress.push(new Packets.ProgressUpdate.JoystickUpdate({
             id: 0,
-            angle: Math.atan2(data.y, data.x),
-            intensity: Math.sqrt(data.x * data.x + data.y * data.y) / SQRT_TWO
+            angle: Math.atan2(data.y, data.x) + ANGLE_OFFSET,
+            intensity: Math.sqrt(data.x * data.x + data.y * data.y)
         }));
 
         let tactileProgress = [];
