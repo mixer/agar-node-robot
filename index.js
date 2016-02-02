@@ -32,6 +32,10 @@ selenium.start({
             arch: process.arch,
             baseURL: 'https://chromedriver.storage.googleapis.com'
         }
+    },
+    logger: console.log
+    spawnOptions: {
+        stdio: 'inherit'
     }
 }, function (err, child) {
     if (err) throw err;
