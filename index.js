@@ -33,7 +33,7 @@ selenium.start({
             baseURL: 'https://chromedriver.storage.googleapis.com'
         }
     },
-    logger: console.log
+    logger: console.log,
     spawnOptions: {
         stdio: 'inherit'
     }
