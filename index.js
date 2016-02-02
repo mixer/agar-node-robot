@@ -28,7 +28,7 @@ function clamp(val, min, max) {
 selenium.start({
     drivers: {
         chrome: {
-            version: '2.20',
+            version: '2.21',
             arch: process.arch,
             baseURL: 'https://chromedriver.storage.googleapis.com'
         }
