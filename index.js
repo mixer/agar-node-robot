@@ -38,10 +38,16 @@ selenium.start({
         stdio: 'inherit'
     }
 }, function (err, child) {
-    if (err) throw err;
+    if (err) { 
+        console.error(err);
+        process.exit(1);
+    }
 
     start(function (err, robot) {
-        if (err) throw err;
+        if (err) { 
+            console.error(err);
+            process.exit(1);
+        }
 
         _robot = robot;
 

@@ -83,7 +83,10 @@ AgarDriver.prototype._login = function () {
             }
             this.client.click(continueButton);
             return this._login();
-        }).catch((err) => console.log(err));
+        }).catch((err) => {
+            console.log(err)
+            process.exit(1);
+        });
 };
 
 AgarDriver.prototype.moveMouse = whenState(states.playing, function (x, y) {
