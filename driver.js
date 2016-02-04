@@ -43,7 +43,8 @@ AgarDriver.prototype.start = function () {
     this.client.init()
         .windowHandleSize({width:process.env.B_WIDTH,height:process.env.B_HEIGHT})
         .url('http://agar.io')
-        .then(() => this._login());
+        .then(() => this._login())
+        .catch(() => process.exit(1));
 
     return this;
 };
