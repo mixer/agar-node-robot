@@ -1,6 +1,6 @@
 const Bluebird = require('bluebird');
 const Packets = require('beam-interactive-node/dist/robot/packets');
-const Tetris = require('beam-interactive-node');
+const Robot = require('beam-interactive-node/dist/robot');
 
 const rp = require('request-promise');
 const config = require('./config/config');
@@ -31,7 +31,7 @@ module.exports = function (callback) {
         data.channel = channel.id;
         data.reportInterval = 20;
         
-        const robot = new Tetris.Robot(data);
+        const robot = new Robot(data);
         robot.handshake(function (err) {
             callback(err, robot);
         });
