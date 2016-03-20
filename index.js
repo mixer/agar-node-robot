@@ -18,6 +18,10 @@ const ANGLE_OFFSET = Math.PI / 2;
 var splitLocked = false;
 
 function clamp(val, min, max) {
+    if (isNaN(val)) {
+        val = 0;
+    }
+
     if (val < min)
         return min;
     if (val > max)
@@ -83,9 +87,10 @@ selenium.start({
             }
 
             let joystickProgress = [];
+            let angleP = Math.atan2(data.y, data.x) + ANGLE_OFFSET;
             joystickProgress.push(new Packets.ProgressUpdate.JoystickUpdate({
                 id: 0,
-                angle: Math.atan2(data.y, data.x) + ANGLE_OFFSET,
+                angle: isNaN(angleP) ? 0 : angleP,
                 intensity: clamp(Math.sqrt(data.x * data.x + data.y * data.y), 0, 1)
             }));
 
